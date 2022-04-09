@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "product")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Product {
     @Id
@@ -40,12 +39,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private DemandStatus demandStatus;
 
-
-    public Product(String name, Integer price, Integer expirationDayPeriod, Integer bigBox, Integer smallBox) {
-        this.name = name;
-        this.price = price;
-        this.expirationDayPeriod = expirationDayPeriod;
-        this.bigBox = bigBox;
-        this.smallBox = smallBox;
-    }
+    @Enumerated(EnumType.STRING)
+    private ProductLevel productLevel;
 }
