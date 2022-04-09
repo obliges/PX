@@ -5,6 +5,7 @@ package project.px.entity;
  * MIDDLE => middle demand
  * LOW => low demand
  */
+
 public enum DemandStatus {
     HIGH, MIDDLE, LOW
 }

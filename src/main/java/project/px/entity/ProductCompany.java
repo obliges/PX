@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "product_company")
 @Getter

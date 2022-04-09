@@ -5,6 +5,7 @@ package project.px.entity;
  * B => Health Functional Food that mart can handle only when mart get permission to sell.
  * C => All Mart can handle.
  */
+
 public enum ProductLevel {
     A, B, C
 }
