@@ -34,6 +34,10 @@ public class Product {
     @JoinColumn(name = "product_transport_id")
     private TransportCompany transportCompany;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
 
@@ -42,4 +46,7 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductLevel productLevel;
+
+
+
 }
