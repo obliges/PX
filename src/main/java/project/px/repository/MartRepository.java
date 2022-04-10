@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import project.px.entity.Mart;
 
 @Repository
-public interface MartRepository extends JpaRepository<Mart, Long> {
+public interface MartRepository extends JpaRepository<Mart, Long>, MartRepositoryCustom {
+
 
 }

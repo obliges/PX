@@ -47,6 +47,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductLevel productLevel;
 
+    @Enumerated(EnumType.STRING)
+    private TransportDay transportDay;
+
 
 
 }

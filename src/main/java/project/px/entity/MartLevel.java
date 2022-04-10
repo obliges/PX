@@ -7,5 +7,5 @@ package project.px.entity;
  */
 
 public enum MartLevel {
-    A, B
+    A, B, C
 }

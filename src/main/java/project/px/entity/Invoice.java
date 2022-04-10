@@ -19,9 +19,6 @@ public class Invoice {
     @JoinColumn(name = "mart_id")
     private Mart mart;
 
-    @OneToMany(mappedBy = "invoice")
-    private List<InvoiceProduct> invoiceProducts;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transport_company_id")
     private TransportCompany transportCompany;
