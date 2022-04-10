@@ -18,6 +18,10 @@ public class Mart {
 
     private Long name;
 
+    private String martCode;
+
+    private String passwd;
+
     @Enumerated(EnumType.STRING)
     private MartLevel martLevel;
 
