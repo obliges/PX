@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import project.px.entity.Invoice;
 
 @Repository
-public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
+public interface InvoiceRepository extends JpaRepository<Invoice, Long>, InvoiceRepositoryCustom {
 
 }

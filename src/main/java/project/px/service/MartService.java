@@ -10,6 +10,7 @@ import project.px.search.MartSearch;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,7 @@ public class MartService {
         return martRepository.findAll();
     }
 
-    public Optional<Mart> findOne(Long martId) {
+    public Optional<Mart> findOne(Long martId) throws NoSuchElementException {
         return martRepository.findById(martId);
     }
 

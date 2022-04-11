@@ -15,11 +15,11 @@ import static project.px.entity.QMart.*;
 @RequiredArgsConstructor
 public class MartRepositoryImpl implements MartRepositoryCustom{
 
-    private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public List<Mart> searchMart(MartSearch martSearch) {
-        return jpaQueryFactory
+        return queryFactory
                 .selectFrom(mart)
                 .where(
                         martNameContain(martSearch.getMartName()),

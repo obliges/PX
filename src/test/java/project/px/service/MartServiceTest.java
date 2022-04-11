@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import project.px.entity.Mart;
 import project.px.entity.MartLevel;
@@ -86,6 +86,9 @@ class MartServiceTest {
 
         Long mart1_id = mart1.getId();
 
+        em.flush();
+        em.clear();
+
         Optional<Mart> mart2 = martService.findOne(mart1_id);
         assertThat(mart2.get().getId()).isEqualTo(mart1_id);
         assertThat(mart2.get()).isEqualTo(mart1);
@@ -93,10 +96,9 @@ class MartServiceTest {
 
     @Test
     public void findOneNotExist() {
-        Optional<Mart> result = martService.findOne(123L);
-
-        assertThat(result.isPresent()).isEqualTo(false);
-        assertThrows(NoSuchElementException.class, () -> result.get());
+        Optional<Mart> mart = martService.findOne(123L);
+        assertThat(mart.isPresent()).isEqualTo(false);
+        assertThat(mart.isEmpty()).isEqualTo(true);
     }
 
     @Test

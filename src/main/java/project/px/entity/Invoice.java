@@ -1,14 +1,19 @@
 package project.px.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "invoice")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Invoice {
     @Id
     @GeneratedValue
@@ -16,12 +21,49 @@ public class Invoice {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mart_id")
+    @JoinColumn(name = "mart_id", nullable = false)
     private Mart mart;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transport_company_id")
-    private TransportCompany transportCompany;
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    private List<InvoiceProduct> invoiceProducts = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DeliveryStatus deliveryStatus;
+
+    @Column(nullable = false)
     private LocalDate arriveDate;
+
+    // private Setter
+    private void setMart(Mart mart) {
+        this.mart = mart;
+    }
+
+
+    private void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    private void setArriveDate(LocalDate arriveDate) {
+        this.arriveDate = arriveDate;
+    }
+
+    // method
+    public static Invoice createInvoice(Mart mart, List<InvoiceProduct> invoiceProducts) {
+        Invoice invoice = new Invoice();
+        invoice.setMart(mart);
+        invoiceProducts.forEach(invoice::addInvoiceProduct);
+        invoice.setDeliveryStatus(DeliveryStatus.DELIVERING);
+        invoice.setArriveDate(LocalDate.now().plusDays(3));
+        // Later, consider the case when client create invoice 23:59:59 and server handles it after next day of 00:00:00.
+        return invoice;
+    }
+
+    public void addInvoiceProduct(InvoiceProduct invoiceProduct) {
+        if (invoiceProduct == null) {
+            return;
+        }
+        invoiceProduct.setInvoice(this);
+        this.invoiceProducts.add(invoiceProduct);
+    }
 }
