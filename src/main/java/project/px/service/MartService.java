@@ -3,12 +3,18 @@ package project.px.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.px.entity.Invoice;
+import project.px.entity.InvoiceProduct;
 import project.px.entity.Mart;
+import project.px.entity.StockProduct;
+import project.px.repository.InvoiceRepository;
 import project.px.repository.MartRepository;
+import project.px.repository.StockProductRepository;
 import project.px.search.MartSearch;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -18,8 +24,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MartService {
 
-    @PersistenceContext
-    EntityManager em;
 
     private final MartRepository martRepository;
 

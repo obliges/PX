@@ -49,5 +49,9 @@ public class Mart {
         this.martLevel = m.getMartLevel();
     }
 
+    public void addStockProduct(StockProduct stockProduct) {
+        this.stockProducts.add(stockProduct);
+    }
+
 
 }

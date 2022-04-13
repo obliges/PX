@@ -2,16 +2,16 @@ package project.px.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import project.px.entity.Invoice;
-import project.px.entity.QInvoice;
-import project.px.entity.QInvoiceProduct;
-import project.px.entity.QProduct;
+import project.px.entity.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static project.px.entity.QInvoice.invoice;
 import static project.px.entity.QInvoiceProduct.*;
+import static project.px.entity.QMart.*;
 import static project.px.entity.QProduct.*;
+import static project.px.entity.QStockProduct.*;
 
 @RequiredArgsConstructor
 public class InvoiceRepositoryImpl implements InvoiceRepositoryCustom {
@@ -35,5 +35,18 @@ public class InvoiceRepositoryImpl implements InvoiceRepositoryCustom {
         }
 
 
+    }
+
+    @Override
+    public List<Invoice> findInvoicesForReceiveInvoiceProducts(Long martId) {
+        List<Invoice> result = queryFactory
+                .selectFrom(invoice).distinct()
+                .leftJoin(invoice.invoiceProducts, invoiceProduct).fetchJoin()
+                .leftJoin(invoiceProduct.product, product).fetchJoin()
+                .leftJoin(invoice.mart, mart).fetchJoin()
+                .leftJoin(invoice.mart.stockProducts, stockProduct).fetchJoin()
+                .where(invoice.mart.id.eq(martId))
+                .fetch();
+        return result;
     }
 }

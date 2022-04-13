@@ -3,7 +3,6 @@ package project.px.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,7 +28,7 @@ public class Invoice {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DeliveryStatus deliveryStatus;
+    private InvoiceStatus invoiceStatus;
 
     @Column(nullable = false)
     private LocalDate arriveDate;
@@ -40,8 +39,8 @@ public class Invoice {
     }
 
 
-    private void setDeliveryStatus(DeliveryStatus deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
+    private void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+        this.invoiceStatus = invoiceStatus;
     }
 
     private void setArriveDate(LocalDate arriveDate) {
@@ -53,7 +52,7 @@ public class Invoice {
         Invoice invoice = new Invoice();
         invoice.setMart(mart);
         invoiceProducts.forEach(invoice::addInvoiceProduct);
-        invoice.setDeliveryStatus(DeliveryStatus.DELIVERING);
+        invoice.setInvoiceStatus(project.px.entity.InvoiceStatus.DELIVERING);
         invoice.setArriveDate(LocalDate.now().plusDays(3));
         // Later, consider the case when client create invoice 23:59:59 and server handles it after next day of 00:00:00.
         return invoice;
@@ -65,5 +64,13 @@ public class Invoice {
         }
         invoiceProduct.setInvoice(this);
         this.invoiceProducts.add(invoiceProduct);
+    }
+
+    public void deliveryArrived() {
+        this.setInvoiceStatus(InvoiceStatus.ARRIVED);
+    }
+
+    public void invoiceCancelled() {
+        this.setInvoiceStatus(InvoiceStatus.CANCELLED);
     }
 }

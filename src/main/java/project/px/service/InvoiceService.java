@@ -1,6 +1,5 @@
 package project.px.service;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -9,24 +8,19 @@ import project.px.entity.*;
 import project.px.repository.InvoiceRepository;
 import project.px.repository.MartRepository;
 import project.px.repository.ProductRepository;
+import project.px.repository.StockProductRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static project.px.entity.QInvoice.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class InvoiceService {
 
-    private final JPAQueryFactory queryFactory;
-
+    private final StockProductRepository stockProductRepository;
     private final InvoiceRepository invoiceRepository;
     private final MartRepository martRepository;
     private final ProductRepository productRepository;
@@ -102,6 +96,37 @@ public class InvoiceService {
 
     public List<Invoice> findInvoices() {
         return invoiceRepository.findAll();
+    }
+
+    public List<StockProduct> receiveInvoiceProducts(Long martId) {
+        List<Invoice> invoices = invoiceRepository.findInvoicesForReceiveInvoiceProducts(martId);
+
+        for (Invoice invoice : invoices) {
+            LocalDate arriveDate = invoice.getArriveDate();
+            LocalDate current = LocalDate.now();
+            if (arriveDate.isEqual(current) || arriveDate.isAfter(current)) {
+                List<InvoiceProduct> invoiceProducts = invoice.getInvoiceProducts();
+                List<StockProduct> stockProducts = invoice.getMart().getStockProducts();
+                for (InvoiceProduct invoiceProduct : invoiceProducts) {
+                    StockProduct stockProduct = stockProducts.stream().findFirst().orElse(null);
+                    if (stockProduct != null) {
+                        stockProduct.addCount(invoiceProduct.getCount());
+                    } else {
+                        stockProductRepository.save(new StockProduct(invoiceProduct.getCount(), invoiceProduct.getProduct(), invoice.getMart()));
+                    }
+                }
+                invoice.deliveryArrived();
+            }
+        }
+        return null;
+    }
+
+    public void cancelInvoice(Long invoiceId) {
+        Invoice invoice = invoiceRepository.findById(invoiceId).orElse(null);
+        if (invoice == null) {
+            return;
+        }
+        invoice.invoiceCancelled();
     }
 
 }
