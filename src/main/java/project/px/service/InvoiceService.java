@@ -104,14 +104,19 @@ public class InvoiceService {
         for (Invoice invoice : invoices) {
             LocalDate arriveDate = invoice.getArriveDate();
             LocalDate current = LocalDate.now();
-            if (arriveDate.isEqual(current) || arriveDate.isAfter(current)) {
+            if (arriveDate.isEqual(current) || arriveDate.isBefore(current)) {
                 List<InvoiceProduct> invoiceProducts = invoice.getInvoiceProducts();
                 List<StockProduct> stockProducts = invoice.getMart().getStockProducts();
                 for (InvoiceProduct invoiceProduct : invoiceProducts) {
-                    StockProduct stockProduct = stockProducts.stream().findFirst().orElse(null);
-                    if (stockProduct != null) {
-                        stockProduct.addCount(invoiceProduct.getCount());
-                    } else {
+                    boolean isStockExist = false;
+                    for (StockProduct stockProduct : stockProducts) {
+                        if (stockProduct.getProduct().getId().equals(invoiceProduct.getProduct().getId())) {
+                            isStockExist = true;
+                            stockProduct.addCount(invoiceProduct.getCount());
+                            break;
+                        }
+                    }
+                    if (!isStockExist) {
                         stockProductRepository.save(new StockProduct(invoiceProduct.getCount(), invoiceProduct.getProduct(), invoice.getMart()));
                     }
                 }

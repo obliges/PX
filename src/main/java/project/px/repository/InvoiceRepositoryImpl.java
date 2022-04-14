@@ -40,11 +40,11 @@ public class InvoiceRepositoryImpl implements InvoiceRepositoryCustom {
     @Override
     public List<Invoice> findInvoicesForReceiveInvoiceProducts(Long martId) {
         List<Invoice> result = queryFactory
-                .selectFrom(invoice).distinct()
+                .select(invoice).distinct()
+                .from(invoice)
                 .leftJoin(invoice.invoiceProducts, invoiceProduct).fetchJoin()
                 .leftJoin(invoiceProduct.product, product).fetchJoin()
                 .leftJoin(invoice.mart, mart).fetchJoin()
-                .leftJoin(invoice.mart.stockProducts, stockProduct).fetchJoin()
                 .where(invoice.mart.id.eq(martId))
                 .fetch();
         return result;

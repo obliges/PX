@@ -73,4 +73,8 @@ public class Invoice {
     public void invoiceCancelled() {
         this.setInvoiceStatus(InvoiceStatus.CANCELLED);
     }
+
+    public void setArriveDateForTest() {
+        this.arriveDate = LocalDate.of(1000, 1, 1);
+    }
 }

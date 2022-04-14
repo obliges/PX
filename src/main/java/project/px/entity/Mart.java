@@ -32,7 +32,7 @@ public class Mart {
     @Column(nullable = false)
     private MartLevel martLevel;
 
-    @OneToMany(mappedBy = "mart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mart", cascade = CascadeType.ALL)
     private List<StockProduct> stockProducts = new ArrayList<>();
 
     public Mart(String name, String martCode, String passwd, MartLevel martLevel) {

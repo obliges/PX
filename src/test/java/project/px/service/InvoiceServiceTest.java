@@ -11,9 +11,8 @@ import project.px.entity.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,6 +25,8 @@ class InvoiceServiceTest {
 
     @Autowired
     InvoiceService invoiceService;
+    @Autowired
+    MartService martService;
 
     @Test
     public void invoice() {
@@ -384,6 +385,138 @@ class InvoiceServiceTest {
     void findOneNotExist() {
         Optional<Invoice> one = invoiceService.findOne(144L);
         assertThat(one.orElse(null)).isNull();
+    }
+
+    @Test
+    void receiveInvoiceProducts() {
+        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        em.persist(mart);
+        Long martId = mart.getId();
+
+
+        List<StockProduct> initStockProducts = mart.getStockProducts();
+
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
+
+        for (int i = 1; i <= 20; i++) {
+
+            Product product = new Product("snack" + i,
+                    800 + 100*i,
+                    180 + 30*i,
+                    12 + 6*i,
+                    null,
+                    productCompany,
+                    transportCompany,
+                    category,
+                    ContractStatus.CONTRACTED,
+                    DemandStatus.HIGH,
+                    ProductLevel.A,
+                    TransportDay.FRI);
+            em.persist(product);
+            Pair<Long, Integer> pair = Pair.of(product.getId(), i);
+            products.add(pair);
+            if (i <= 10) {
+                em.persist(new StockProduct(i, product, mart));
+            }
+        }
+
+
+
+        Long invoiceId = invoiceService.invoice(martId, products);
+
+        Invoice temp = em.find(Invoice.class, invoiceId);
+        temp.setArriveDateForTest();
+        em.flush();
+        em.clear();
+
+        invoiceService.receiveInvoiceProducts(martId);
+
+        mart = martService.findOne(martId).get();
+
+        List<Integer> counts = mart.getStockProducts().stream().map(StockProduct::getCount).collect(Collectors.toList());
+        List<Product> productList = mart.getStockProducts().stream().map(StockProduct::getProduct).collect(Collectors.toList());
+        List<String> nameList = productList.stream().map(Product::getName).collect(Collectors.toList());
+
+        assertThat(mart.getStockProducts().size()).isEqualTo(20);
+        assertThat(counts).containsExactly(2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+        assertThat(productList).extracting(Product::getName).containsExactly(
+                "snack1", "snack2", "snack3", "snack4", "snack5",
+                "snack6", "snack7", "snack8", "snack9", "snack10",
+                "snack11", "snack12", "snack13", "snack14", "snack15",
+                "snack16", "snack17", "snack18", "snack19", "snack20"
+        );
+
+        for (int i = 1 ; i <= 20; i++) {
+            if (i <= 10) {
+                assertThat(counts.get(i-1)).isEqualTo(2*i);
+            }
+            else {
+                assertThat(counts.get(i-1)).isEqualTo(i);
+            }
+            assertThat(nameList.get(i-1)).isEqualTo("snack" + i);
+        }
+
+
+
+
+    }
+
+
+    @Test
+    void cancelInvoice() {
+        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        em.persist(mart);
+        Long martId = mart.getId();
+
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
+
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product("snack" + i,
+                    800 + 100*i,
+                    180 + 30*i,
+                    12 + 6*i,
+                    null,
+                    productCompany,
+                    transportCompany,
+                    category,
+                    ContractStatus.CONTRACTED,
+                    DemandStatus.HIGH,
+                    ProductLevel.A,
+                    TransportDay.FRI);
+            em.persist(product);
+            Pair<Long, Integer> pair = Pair.of(product.getId(), i);
+            products.add(pair);
+        }
+        Long invoiceId = invoiceService.invoice(martId, products);
+
+        invoiceService.cancelInvoice(invoiceId);
+
+        em.flush();
+        em.clear();
+        Optional<Invoice> one = invoiceService.findOne(invoiceId);
+        Invoice invoice = one.orElse(null);
+
+        assertThat(invoice.getInvoiceStatus()).isEqualTo(InvoiceStatus.CANCELLED);
     }
 
 }
