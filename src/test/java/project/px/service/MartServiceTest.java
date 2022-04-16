@@ -30,6 +30,7 @@ class MartServiceTest {
     @Autowired
     MartService martService;
 
+    // Test 1 : Join new Mart
     @Test
     public void join() {
         Mart mart1 = new Mart("mart1", "110000", "110000!", MartLevel.A);
@@ -38,27 +39,41 @@ class MartServiceTest {
         Long id1 = martService.join(mart1);
         Long id2 = martService.join(mart2);
 
-        assertThat(mart1.getId()).isEqualTo(id1);
-        assertThat(mart2.getId()).isEqualTo(id2);
+        em.flush();
+        em.clear();
+
+        List<Mart> marts = em.createQuery("select m from Mart m", Mart.class)
+                .getResultList();
+
+        // The number of marts in DB should be 2
+        assertThat(marts.size()).isEqualTo(2);
+        // The each name of marts in DB should be mart1, mart2
+        assertThat(marts).extracting(Mart::getName).containsExactly("mart1", "mart2");
     }
 
+    // Test 2 : Join existing Mart (currently it is merged)
     @Test
     public void joinAlreadyExist() {
         Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
         martService.join(mart);
-        Mart findMart = em.find(Mart.class, mart.getId());
 
-        findMart.updateMartInfo(new Mart("mart2", "110001", "110001!", MartLevel.B));
-        martService.join(findMart);
+        mart.updateMartInfo(new Mart("mart2", "110001", "110001!", MartLevel.B));
+        martService.join(mart); // merged with existing mart
+
+        em.flush();
+        em.clear();
+
         List<Mart> findMarts = em.createQuery("select m from Mart m where m.id = :id", Mart.class)
                 .setParameter("id", mart.getId())
                 .getResultList();
 
+        // The number of marts in DB should be 1
         assertThat(findMarts.size()).isEqualTo(1);
+        // The existing mart's name should be changed into mart2
         assertThat(findMarts.get(0).getName()).isEqualTo("mart2");
-        assertThat(findMarts.get(0)).isEqualTo(findMart);
     }
 
+    // Test 3 : Find all marts from DB
     @Test
     public void findAll() {
         Mart mart1 = new Mart("mart1", "110000", "110000!", MartLevel.A);
@@ -66,19 +81,27 @@ class MartServiceTest {
         em.persist(mart1);
         em.persist(mart2);
 
+        em.flush();
+        em.clear();
+
         List<Mart> result = martService.findMarts();
 
+        // The number of marts in DB should be 2
         assertThat(result.size()).isEqualTo(2);
+        // The each name of marts in DB should be mart1, mart2
         assertThat(result).extracting(Mart::getName).containsExactly("mart1", "mart2");
     }
 
+    // Test 4 : find all marts from DB that does not have any marts
     @Test
     public void findAllEmpty() {
         List<Mart> result = martService.findMarts();
 
+        // The number of marts in DB should be 0 (Empty)
         assertThat(result.size()).isEqualTo(0);
     }
 
+    // Test 5 : Find one mart from DB
     @Test
     public void findOne() {
         Mart mart1 = new Mart("mart1", "110000", "110000!", MartLevel.A);
@@ -89,32 +112,36 @@ class MartServiceTest {
         em.flush();
         em.clear();
 
-        Optional<Mart> mart2 = martService.findOne(mart1_id);
-        assertThat(mart2.get().getId()).isEqualTo(mart1_id);
-        assertThat(mart2.get()).isEqualTo(mart1);
+        Mart mart = martService.findOne(mart1_id).orElse(null);
+
+        // mart should not be null (found)
+        assertThat(mart).isNotNull();
     }
 
+    // Test 6 : Find one mart that is not exist in the DB
     @Test
     public void findOneNotExist() {
         Optional<Mart> mart = martService.findOne(123L);
+
+        // mart is not found
         assertThat(mart.isPresent()).isEqualTo(false);
-        assertThat(mart.isEmpty()).isEqualTo(true);
+        // mart is null
+        assertThat(mart.orElse(null)).isNull();
     }
 
+    // Test 7 : Find all marts that satisfy the some conditions
     @Test
     public void searchMart() {
         for (int i = 1; i <= 10; i++) {
             em.persist(new Mart("mart" + i, "1100" + i, "154894", i % 2 == 0 ? MartLevel.A : MartLevel.B));
         }
 
-        String martName = "art";
-        String martCode = "11001";
-        MartLevel martLevel = null;
-
-        List<Mart> result1 = martService.searchMarts(new MartSearch(martName, martCode, martLevel));
+        // Case 1 : martName contains art, martCode contains 11001
+        List<Mart> result1 = martService.searchMarts(new MartSearch("art", "11001", null));
         assertThat(result1.size()).isEqualTo(2);
         assertThat(result1).extracting(Mart::getName).containsExactly("mart1", "mart10");
 
+        // Case 2 : martCode contains 11, martLevel is B
         List<Mart> result2 = martService.searchMarts(new MartSearch(null, "11", MartLevel.B));
         assertThat(result2.size()).isEqualTo(5);
         assertThat(result2).extracting(Mart::getName).containsExactly("mart1", "mart3", "mart5", "mart7", "mart9");
