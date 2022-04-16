@@ -55,10 +55,6 @@ public class Product {
     @Column(nullable = false)
     private ProductLevel productLevel;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TransportDay transportDay;
-
     public Product(String name,
                    Integer price,
                    Integer expirationDayPeriod,
@@ -69,8 +65,7 @@ public class Product {
                    Category category,
                    ContractStatus contractStatus,
                    DemandStatus demandStatus,
-                   ProductLevel productLevel,
-                   TransportDay transportDay) {
+                   ProductLevel productLevel) {
         this.name = name;
         this.price = price;
         this.expirationDayPeriod = expirationDayPeriod;
@@ -82,6 +77,5 @@ public class Product {
         this.contractStatus = contractStatus;
         this.demandStatus = demandStatus;
         this.productLevel = productLevel;
-        this.transportDay = transportDay;
     }
 }

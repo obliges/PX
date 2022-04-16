@@ -60,8 +60,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -112,8 +111,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -167,8 +165,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -191,8 +188,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             addProducts.add(pair);
@@ -245,8 +241,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -300,8 +295,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -323,8 +317,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             addProducts.add(pair);
@@ -378,8 +371,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -428,8 +420,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -488,8 +479,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -580,8 +570,7 @@ class InvoiceServiceTest {
                     category,
                     ContractStatus.CONTRACTED,
                     DemandStatus.HIGH,
-                    ProductLevel.A,
-                    TransportDay.FRI);
+                    ProductLevel.A);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
