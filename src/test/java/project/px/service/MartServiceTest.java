@@ -112,7 +112,7 @@ class MartServiceTest {
         em.flush();
         em.clear();
 
-        Mart mart = martService.findOne(mart1_id).orElse(null);
+        Mart mart = martService.findOne(mart1_id);
 
         // mart should not be null (found)
         assertThat(mart).isNotNull();
@@ -121,12 +121,7 @@ class MartServiceTest {
     // Test 6 : Find one mart that is not exist in the DB
     @Test
     public void findOneNotExist() {
-        Optional<Mart> mart = martService.findOne(123L);
-
-        // mart is not found
-        assertThat(mart.isPresent()).isEqualTo(false);
-        // mart is null
-        assertThat(mart.orElse(null)).isNull();
+        assertThrows(IllegalArgumentException.class, () -> martService.findOne(123L));
     }
 
     // Test 7 : Find all marts that satisfy the some conditions

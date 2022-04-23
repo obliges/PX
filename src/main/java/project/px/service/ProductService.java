@@ -21,11 +21,15 @@ public class ProductService {
         return savedProduct.getId();
     }
 
+    @Transactional(readOnly = true)
     public List<Product> findProducts() {
         return productRepository.findAll();
     }
 
-    public Optional<Product> findOne(Long productId) {
-        return productRepository.findById(productId);
+    @Transactional(readOnly = true)
+    public Product findOne(Long productId) {
+        return productRepository.findById(productId).orElseThrow(
+                () -> new IllegalArgumentException("Product whose id is " + productId + " does not exist.")
+        );
     }
 }

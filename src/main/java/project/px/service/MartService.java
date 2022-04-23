@@ -28,8 +28,10 @@ public class MartService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Mart> findOne(Long martId) {
-        return martRepository.findById(martId);
+    public Mart findOne(Long martId) {
+        return martRepository.findById(martId).orElseThrow(
+                () -> new IllegalArgumentException("Mart whose id is " + martId + " does not exist.")
+        );
     }
 
     // Get all marts that satisfy the Conditions of the martSearch

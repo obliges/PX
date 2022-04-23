@@ -28,20 +28,19 @@ public class InvoiceService {
     // Creating new invoice
     // products contains pairs of productId and count
     public Long invoice(Long martId, List<Pair<Long, Integer>> products) {
-        Mart mart =  martRepository.findById(martId).orElse(null);
-        // it is not determined how to handle the case when mart does not exist
-        if (mart == null) {
-            return -1L;
-        }
+        Mart mart =  martRepository.findById(martId).orElseThrow(
+                () -> new IllegalArgumentException("Mart whose id is " + martId + " does not exist.")
+        );
         List<InvoiceProduct> invoiceProducts = new ArrayList<>();
 
         // add invoiceProducts
         for (Pair<Long, Integer> p : products) {
-            Product product = productRepository.findById(p.getFirst()).orElse(null);
-            if (product == null) {
-                continue;
+            Product product = productRepository.findById(p.getFirst()).orElseThrow(
+                    () -> new IllegalArgumentException("Product whose id is " + p.getFirst() + " does not exist.")
+            );
+            if (p.getSecond() != 0) {
+                invoiceProducts.add(new InvoiceProduct(p.getSecond(), product));
             }
-            invoiceProducts.add(new InvoiceProduct(p.getSecond(), product));
         }
 
         Invoice invoice = Invoice.createInvoice(mart, invoiceProducts);
@@ -54,11 +53,9 @@ public class InvoiceService {
     // add InvoiceProducts to the already exist invoice
     // products contains pairs of productId and count
     public void addInvoiceProducts(Long invoiceId, List<Pair<Long, Integer>> products) {
-        Invoice invoice = invoiceRepository.findByIdFetchJoinInvoiceProductsAndProduct(invoiceId);
-        // it is not determined how to handle the case when invoice does not exist
-        if (invoice == null) {
-            return;
-        }
+        Invoice invoice = invoiceRepository.findByIdFetchJoinInvoiceProductsAndProduct(invoiceId).orElseThrow(
+                () -> new IllegalArgumentException("Invoice whose id is " + invoiceId + " does not exist.")
+        );
         List<InvoiceProduct> invoiceProducts = invoice.getInvoiceProducts();
 
         // 1. isExist => product is already exist int he invoiceProducts => find same product in invoiceProducts and just add count.
@@ -69,15 +66,15 @@ public class InvoiceService {
                 if (invoiceProduct.getProduct().getId().equals(p.getFirst())) {
                     invoiceProduct.addCount(p.getSecond());
                     isExist = true;
-                    continue;
                 }
             }
             if (!isExist) {
-                Product product = productRepository.findById(p.getFirst()).orElse(null);
-                if (product == null) {
-                    break;
+                Product product = productRepository.findById(p.getFirst()).orElseThrow(
+                        () -> new IllegalArgumentException("Product whose id is " + p.getFirst() + " does not exist.")
+                );
+                if (p.getSecond() != 0) {
+                    invoiceProducts.add(new InvoiceProduct(p.getSecond(), product, invoice));
                 }
-                invoice.addInvoiceProduct(new InvoiceProduct(p.getSecond(), product));
             }
         }
     }
@@ -85,13 +82,9 @@ public class InvoiceService {
     // reduce InvoiceProducts to the already exist invoice
     // products contains pairs of productId and count
     public void reduceInvoiceProducts(Long invoiceId, List<Pair<Long, Integer>> products) {
-        // Get invoice with invoiceProducts and products of invoiceProducts with one query.
-        Invoice invoice = invoiceRepository.findByIdFetchJoinInvoiceProductsAndProduct(invoiceId);
-
-        // it is not determined how to handle the case when invoice does not exist
-        if (invoice == null) {
-            return;
-        }
+        Invoice invoice = invoiceRepository.findByIdFetchJoinInvoiceProductsAndProduct(invoiceId).orElseThrow(
+                () -> new IllegalArgumentException("Invoice whose id is " + invoiceId + " does not exist.")
+        );
         List<InvoiceProduct> invoiceProducts = invoice.getInvoiceProducts();
 
         // reduce the count. it is not determined when product is not exist in the invoiceProducts
@@ -106,8 +99,10 @@ public class InvoiceService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Invoice> findOne(Long invoiceId) {
-        return invoiceRepository.findById(invoiceId);
+    public Invoice findOne(Long invoiceId) {
+        return invoiceRepository.findById(invoiceId).orElseThrow(
+                () -> new IllegalArgumentException("Invoice whose id is " + invoiceId + " does not exist.")
+        );
     }
 
     @Transactional(readOnly = true)
@@ -153,11 +148,9 @@ public class InvoiceService {
     // Cancel the invoice
     // Invoice is not deleted and saved in the DB
     public void cancelInvoice(Long invoiceId) {
-        Invoice invoice = invoiceRepository.findById(invoiceId).orElse(null);
-        // it is not determined how to handle the case when invoice does not exist
-        if (invoice == null) {
-            return;
-        }
+        Invoice invoice = invoiceRepository.findById(invoiceId).orElseThrow(
+                () -> new IllegalArgumentException("Invoice whose id is " + invoiceId + " does not exist.")
+        );
         // InvoiceStatus.CANCELLED
         invoice.invoiceCancelled();
     }

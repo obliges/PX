@@ -59,9 +59,6 @@ public class Invoice {
     }
 
     public void addInvoiceProduct(InvoiceProduct invoiceProduct) {
-        if (invoiceProduct == null) {
-            return;
-        }
         invoiceProduct.setInvoice(this);
         this.invoiceProducts.add(invoiceProduct);
     }

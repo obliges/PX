@@ -128,8 +128,7 @@ class ProductServiceTest {
         em.flush();
         em.clear();
 
-        Optional<Product> one = productService.findOne(productId);
-        Product foundProduct = one.orElse(null);
+        Product foundProduct = productService.findOne(productId);
 
         // foundProduct should not be null
         assertThat(foundProduct).isNotNull();
@@ -140,13 +139,7 @@ class ProductServiceTest {
     // Test 4 : Find One that does not exist in DB
     @Test
     public void findOneNotExist() {
-        Optional<Product> one = productService.findOne(16579L);
-        Product foundProduct = one.orElse(null);
-
-        // foundProduct should be null because it does not exist in DB
-        assertThat(foundProduct).isNull();
-        // It throws the exception
-        assertThrows(Exception.class, one::orElseThrow);
+        assertThrows(IllegalArgumentException.class, () -> productService.findOne(16579L));
     }
 
 }

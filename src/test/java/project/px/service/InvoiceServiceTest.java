@@ -1,5 +1,6 @@
 package project.px.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -428,19 +430,16 @@ class InvoiceServiceTest {
         Long invoiceId = invoiceService.invoice(martId, products);
         // End of Creating One Invoice
 
-        Optional<Invoice> one = invoiceService.findOne(invoiceId);
+        Invoice invoice = invoiceService.findOne(invoiceId);
 
         // Created invoice should be found through the invoiceService
-        assertThat(one.orElse(null)).isNotNull();
+        assertThat(invoice).isNotNull();
     }
 
     // Test 8 : The case when finding one invoice that does not exist in the DB
     @Test
     void findOneNotExist() {
-        Optional<Invoice> one = invoiceService.findOne(144L);
-
-        // the invoice whose id is same with 144L does not exist in Db.
-        assertThat(one.orElse(null)).isNull();
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.findOne(144L));
     }
 
     // Test 9 : Receiving invoiceProducts and update the invoice status and stockProducts of mart.
@@ -507,7 +506,7 @@ class InvoiceServiceTest {
         em.clear();
 
         // Get updated mart
-        mart = martService.findOne(martId).get();
+        mart = martService.findOne(martId);
 
         List<Integer> counts = mart.getStockProducts().stream().map(StockProduct::getCount).collect(Collectors.toList());
         List<Product> productList = mart.getStockProducts().stream().map(StockProduct::getProduct).collect(Collectors.toList());

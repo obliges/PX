@@ -5,11 +5,12 @@ import project.px.entity.Invoice;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InvoiceRepositoryCustom {
 
-    Invoice findByIdFetchJoinInvoiceProductsAndProduct(Long invoiceId);
+    Optional<Invoice> findByIdFetchJoinInvoiceProductsAndProduct(Long invoiceId);
 
     List<Invoice> findInvoicesForReceiveInvoiceProducts(Long martId);
 }

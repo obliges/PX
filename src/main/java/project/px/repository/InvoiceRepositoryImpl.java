@@ -6,6 +6,7 @@ import project.px.entity.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static project.px.entity.QInvoice.invoice;
 import static project.px.entity.QInvoiceProduct.*;
@@ -19,19 +20,18 @@ public class InvoiceRepositoryImpl implements InvoiceRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Invoice findByIdFetchJoinInvoiceProductsAndProduct(Long invoiceId) {
+    public Optional<Invoice> findByIdFetchJoinInvoiceProductsAndProduct(Long invoiceId) {
         List<Invoice> result = queryFactory
                 .selectFrom(invoice).distinct()
                 .leftJoin(invoice.invoiceProducts, invoiceProduct).fetchJoin()
                 .leftJoin(invoiceProduct.product, product).fetchJoin()
                 .where(invoice.id.eq(invoiceId))
                 .fetch();
-        // Id is unique, so result only has one element or is empty(not found)
         if (result.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
         else {
-            return result.get(0);
+            return Optional.ofNullable(result.get(0));
         }
 
 

@@ -28,12 +28,7 @@ public class InvoiceProduct {
     private Invoice invoice;
 
     public void setInvoice(Invoice invoice) {
-        if (this.invoice == null) {
-            this.invoice = invoice;
-        }
-        else {
-            //Maybe throws exception
-        }
+        this.invoice = invoice;
     }
 
     public InvoiceProduct(Integer count, Product product) {
@@ -41,13 +36,23 @@ public class InvoiceProduct {
         this.product = product;
     }
 
+    public InvoiceProduct(Integer count, Product product, Invoice invoice) {
+        this.count = count;
+        this.product = product;
+        this.invoice = invoice;
+        invoice.addInvoiceProduct(this);
+    }
+
     public void addCount(Integer add) {
+        if (add < 0) {
+            throw new IllegalArgumentException("amount should not be minus");
+        }
         this.count += add;
     }
 
     public void reduceCount(Integer remove) {
         if (this.count - remove < 0) {
-            return;
+            throw new IllegalArgumentException("count should not be minus");
         }
         this.count -= remove;
     }
