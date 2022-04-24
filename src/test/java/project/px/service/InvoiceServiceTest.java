@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -378,7 +379,8 @@ class InvoiceServiceTest {
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
         }
-        Long invoiceId = invoiceService.invoice(martId, products);
+        invoiceService.invoice(martId, products);
+        invoiceService.invoice(martId, products);
         // End of Creating One Invoice
 
         em.flush();
@@ -387,7 +389,7 @@ class InvoiceServiceTest {
         List<Invoice> invoices = invoiceService.findInvoices();
 
         // There is only one invoice.
-        assertThat(invoices.size()).isEqualTo(1);
+        assertThat(invoices.size()).isEqualTo(2);
     }
 
     // Test 7 : Find One invoices that exist in the DB.
@@ -587,6 +589,204 @@ class InvoiceServiceTest {
 
         // The status of the Invoice should be Cancelled
         assertThat(invoice.getInvoiceStatus()).isEqualTo(InvoiceStatus.CANCELLED);
+    }
+
+    // Test 11 : Canceling non-exist invoice
+    @Test
+    public void cancelInvoiceNotExist() {
+        // It throws IllegalArgumentException because invoice whose id is 999 does not exist.
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.cancelInvoice(999L));
+    }
+
+    // Test 12 : Invoice when Mart is not exist.
+    @Test
+    public void invoiceMartNotExist() {
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
+
+        // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product("snack" + i,
+                    800 + 100*i,
+                    180 + 30*i,
+                    12 + 6*i,
+                    null,
+                    productCompany,
+                    transportCompany,
+                    category,
+                    ContractStatus.CONTRACTED,
+                    DemandStatus.HIGH,
+                    ProductLevel.A);
+            em.persist(product);
+            Pair<Long, Integer> pair = Pair.of(product.getId(), i);
+            products.add(pair);
+        }
+
+        // It throws IllegalArgumentException because mart whose id is 999 does not exist.
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.invoice(999L, products));
+    }
+
+    // Test 13 : Invoice when product is not exist.
+    @Test
+    public void invoiceProductNotExist() {
+        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        em.persist(mart);
+        Long martId = mart.getId();
+
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
+
+        // put product that does not exist.
+        for (int i = 1; i <= 10; i++) {
+            Pair<Long, Integer> pair = Pair.of(i*100L, i);
+            products.add(pair);
+        }
+
+        // It throws IllegalArgumentException because product whose id is multiple of 100 does not exist.
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.invoice(martId, products));
+    }
+
+    // Test 14 : Add InvoiceProducts to the non-exist invoice
+    @Test
+    public void addInvoiceProductsInvoiceNotExist() {
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> addProducts = new ArrayList<>();
+
+        // (name, count) => (snack11, 11), (snack12, 12), ... , (snack20, 20)
+        for (int i = 11; i <= 20; i++) {
+            Product product = new Product("snack" + i,
+                    800 + 100*i,
+                    180 + 30*i,
+                    12 + 6*i,
+                    null,
+                    productCompany,
+                    transportCompany,
+                    category,
+                    ContractStatus.CONTRACTED,
+                    DemandStatus.HIGH,
+                    ProductLevel.A);
+            em.persist(product);
+            Pair<Long, Integer> pair = Pair.of(product.getId(), i);
+            addProducts.add(pair);
+        }
+
+        // It throws IllegalArgumentException because invoice whose id is 999 does not exist.
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.addInvoiceProducts(999L, addProducts));
+    }
+
+    // Test 15 : Add InvoiceProducts whose product does not exist.
+    @Test
+    public void addInvoiceProductsProductNotExist() {
+        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        em.persist(mart);
+        Long martId = mart.getId();
+
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
+
+        // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product("snack" + i,
+                    800 + 100*i,
+                    180 + 30*i,
+                    12 + 6*i,
+                    null,
+                    productCompany,
+                    transportCompany,
+                    category,
+                    ContractStatus.CONTRACTED,
+                    DemandStatus.HIGH,
+                    ProductLevel.A);
+            em.persist(product);
+            Pair<Long, Integer> pair = Pair.of(product.getId(), i);
+            products.add(pair);
+        }
+        Long invoiceId = invoiceService.invoice(martId, products);
+
+        ArrayList<Pair<Long, Integer>> addProducts = new ArrayList<>();
+
+        // put product that does not exist.
+        for (int i = 1; i <= 10; i++) {
+            Pair<Long, Integer> pair = Pair.of(i*100L, i);
+            addProducts.add(pair);
+        }
+
+        // It throws IllegalArgumentException because product whose id is multiple of 100 does not exist.
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.addInvoiceProducts(invoiceId, addProducts));
+    }
+
+    // Test 16 : Reduce InvoiceProducts to the non-exist invoice.
+    @Test
+    public void reduceInvoiceProductsInvoiceNotExist() {
+        TransportCompany transportCompany = new TransportCompany("tc1");
+        ProductCompany productCompany = new ProductCompany("pc1");
+
+        em.persist(transportCompany);
+        em.persist(productCompany);
+
+        Category category = new Category("snack");
+
+        em.persist(category);
+
+        ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
+
+        // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
+        for (int i = 1; i <= 10; i++) {
+            Product product = new Product("snack" + i,
+                    800 + 100*i,
+                    180 + 30*i,
+                    12 + 6*i,
+                    null,
+                    productCompany,
+                    transportCompany,
+                    category,
+                    ContractStatus.CONTRACTED,
+                    DemandStatus.HIGH,
+                    ProductLevel.A);
+            em.persist(product);
+            Pair<Long, Integer> pair = Pair.of(product.getId(), i);
+            products.add(pair);
+        }
+
+
+        // It throws IllegalArgumentException because invoice whose id is 999 does not exist.
+        assertThrows(IllegalArgumentException.class, () -> invoiceService.reduceInvoiceProducts(999L, products));
     }
 
 }

@@ -111,8 +111,7 @@ public class InvoiceService {
     }
 
     // Receive the products from the invoices
-    // It is not determined to put this function to the invoiceService or martService
-    public List<StockProduct> receiveInvoiceProducts(Long martId) {
+    public void receiveInvoiceProducts(Long martId) {
         // Get invoice with mart, invoiceProducts, and products of invoiceProducts with one query.
         List<Invoice> invoices = invoiceRepository.findInvoicesForReceiveInvoiceProducts(martId);
 
@@ -142,7 +141,6 @@ public class InvoiceService {
                 invoice.deliveryArrived();
             }
         }
-        return null;
     }
 
     // Cancel the invoice
