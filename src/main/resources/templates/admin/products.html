@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/styles.css}"
+            href="../css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary float-end"
+                onclick="location.href='productAddForm.html'"
+                th:onclick="|location.href='@{/admin/product/add}'|"
+                type="button">Add</button>
+    </div>
+</div>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>price</td>
+                <td>expirationDayPeriod</td>
+                <td>bigBox</td>
+                <td>smallBox</td>
+                <td>transportCompany</td>
+                <td>category</td>
+                <td>contractStatus</td>
+                <td>demandStatus</td>
+                <td>productLevel</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}">id</td>
+                <td th:text="${product.name}">name</td>
+                <td th:text="${product.price}">price</td>
+                <td th:text="${product.expirationDayPeriod}">expirationDayPeriod</td>
+                <td th:text="${product.bigBox}">bigBox</td>
+                <td th:text="${product.smallBox}">smallBox</td>
+                <td th:text="${product.transportCompany}">transportCompany</td>
+                <td th:text="${product.category}">category</td>
+                <td th:text="${product.contractStatus}">contractStatus</td>
+                <td th:text="${product.demandStatus}">demandStatus</td>
+                <td th:text="${product.productLevel}">productLevel</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

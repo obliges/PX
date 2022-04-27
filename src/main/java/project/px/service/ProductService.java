@@ -3,11 +3,11 @@ package project.px.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.px.dto.ProductDto;
 import project.px.entity.Product;
 import project.px.repository.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
