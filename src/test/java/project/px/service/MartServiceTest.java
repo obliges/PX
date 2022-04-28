@@ -33,8 +33,8 @@ class MartServiceTest {
     // Test 1 : Join new Mart
     @Test
     public void join() {
-        Mart mart1 = new Mart("mart1", "110000", "110000!", MartLevel.A);
-        Mart mart2 = new Mart("mart2", "110001", "110001!", MartLevel.B);
+        Mart mart1 = new Mart("mart1");
+        Mart mart2 = new Mart("mart2");
 
         Long id1 = martService.join(mart1);
         Long id2 = martService.join(mart2);
@@ -54,10 +54,10 @@ class MartServiceTest {
     // Test 2 : Join existing Mart (currently it is merged)
     @Test
     public void joinAlreadyExist() {
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         martService.join(mart);
 
-        mart.updateMartInfo(new Mart("mart2", "110001", "110001!", MartLevel.B));
+        mart.updateMartInfo(new Mart("mart2"));
         martService.join(mart); // merged with existing mart
 
         em.flush();
@@ -76,8 +76,8 @@ class MartServiceTest {
     // Test 3 : Find all marts from DB
     @Test
     public void findAll() {
-        Mart mart1 = new Mart("mart1", "110000", "110000!", MartLevel.A);
-        Mart mart2 = new Mart("mart2", "110001", "110001!", MartLevel.B);
+        Mart mart1 = new Mart("mart1");
+        Mart mart2 = new Mart("mart2");
         em.persist(mart1);
         em.persist(mart2);
 
@@ -104,18 +104,18 @@ class MartServiceTest {
     // Test 5 : Find one mart from DB
     @Test
     public void findOne() {
-        Mart mart1 = new Mart("mart1", "110000", "110000!", MartLevel.A);
-        em.persist(mart1);
+        Mart mart = new Mart("mart1");
+        em.persist(mart);
 
-        Long mart1_id = mart1.getId();
+        Long mart_id = mart.getId();
 
         em.flush();
         em.clear();
 
-        Mart mart = martService.findOne(mart1_id);
+        Mart foundMart = martService.findOne(mart_id);
 
         // mart should not be null (found)
-        assertThat(mart).isNotNull();
+        assertThat(foundMart.getName()).isEqualTo("mart1");
     }
 
     // Test 6 : Find one mart that is not exist in the DB
@@ -127,6 +127,13 @@ class MartServiceTest {
     // Test 7 : Find all marts that satisfy the some conditions
     @Test
     public void searchMart() {
+        /*
+        mart1, 11001, 154894, MartLevel.B
+        mart2, 11002, 154894, MartLevel.A
+        ...
+        ...
+        mart10, 110010, 154894, MartLevel.A
+         */
         for (int i = 1; i <= 10; i++) {
             em.persist(new Mart("mart" + i, "1100" + i, "154894", i % 2 == 0 ? MartLevel.A : MartLevel.B));
         }

@@ -19,7 +19,6 @@ public class ProductCompany {
     @Column(name = "product_company_id")
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
     public ProductCompany(String name) {

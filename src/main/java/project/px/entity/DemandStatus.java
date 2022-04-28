@@ -7,5 +7,15 @@ package project.px.entity;
  */
 
 public enum DemandStatus {
-    HIGH, MIDDLE, LOW
+    HIGH("High"), MIDDLE("Middle"), LOW("Low");
+
+    private final String description;
+
+    DemandStatus(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

@@ -16,15 +16,14 @@ public class InvoiceProduct {
     @Column(name = "invoice_product_id")
     private Long id;
 
-    @Column(nullable = false)
     private Integer count;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id", nullable = false)
+    @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
     public void setInvoice(Invoice invoice) {

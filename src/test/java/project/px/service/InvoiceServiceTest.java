@@ -35,35 +35,15 @@ class InvoiceServiceTest {
     @Test
     public void invoice() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -76,8 +56,8 @@ class InvoiceServiceTest {
 
         Invoice invoice = em.find(Invoice.class, invoiceId);
 
-        // Invoice should not be null
-        assertThat(invoice).isNotNull();
+        // Mart of the invoice should be equal to mart1
+        assertThat(invoice.getMart().getName()).isEqualTo("mart1");
         // There should be 10 invoiceProducts
         assertThat(invoice.getInvoiceProducts().size()).isEqualTo(10);
     }
@@ -86,35 +66,15 @@ class InvoiceServiceTest {
     @Test
     public void addInvoiceProductsAlreadyExistProduct() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -140,35 +100,15 @@ class InvoiceServiceTest {
     @Test
     public void addInvoiceProductsNewProduct() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -181,17 +121,7 @@ class InvoiceServiceTest {
 
         // (name, count) => (snack11, 11), (snack12, 12), ... , (snack20, 20)
         for (int i = 11; i <= 20; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             addProducts.add(pair);
@@ -216,35 +146,15 @@ class InvoiceServiceTest {
     @Test
     public void reduceInvoiceProductsAlreadyExistProduct() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -270,35 +180,15 @@ class InvoiceServiceTest {
     @Test
     public void reduceInvoiceProductsNewProduct() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -310,17 +200,7 @@ class InvoiceServiceTest {
         // (name, count) => (snack11, 11), (snack12, 12), ... , (snack20, 20)
         ArrayList<Pair<Long, Integer>> addProducts = new ArrayList<>();
         for (int i = 11; i <= 20; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             addProducts.add(pair);
@@ -346,35 +226,15 @@ class InvoiceServiceTest {
     @Test
     void findAll() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -396,35 +256,15 @@ class InvoiceServiceTest {
     @Test
     void findOne() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -448,39 +288,18 @@ class InvoiceServiceTest {
     @Test
     void receiveInvoiceProducts() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
 
-
         List<StockProduct> initStockProducts = mart.getStockProducts();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // InvoiceProducts : (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 20)
         // StockProducts : (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 20; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -543,35 +362,15 @@ class InvoiceServiceTest {
     @Test
     void cancelInvoice() {
         // Start of Creating One Invoice
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -601,31 +400,11 @@ class InvoiceServiceTest {
     // Test 12 : Invoice when Mart is not exist.
     @Test
     public void invoiceMartNotExist() {
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
-
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -638,19 +417,9 @@ class InvoiceServiceTest {
     // Test 13 : Invoice when product is not exist.
     @Test
     public void invoiceProductNotExist() {
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
@@ -667,31 +436,11 @@ class InvoiceServiceTest {
     // Test 14 : Add InvoiceProducts to the non-exist invoice
     @Test
     public void addInvoiceProductsInvoiceNotExist() {
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
-
         ArrayList<Pair<Long, Integer>> addProducts = new ArrayList<>();
 
         // (name, count) => (snack11, 11), (snack12, 12), ... , (snack20, 20)
         for (int i = 11; i <= 20; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             addProducts.add(pair);
@@ -704,35 +453,15 @@ class InvoiceServiceTest {
     // Test 15 : Add InvoiceProducts whose product does not exist.
     @Test
     public void addInvoiceProductsProductNotExist() {
-        Mart mart = new Mart("mart1", "110000", "110000!", MartLevel.A);
+        Mart mart = new Mart("mart1");
         em.persist(mart);
         Long martId = mart.getId();
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
 
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
@@ -754,36 +483,15 @@ class InvoiceServiceTest {
     // Test 16 : Reduce InvoiceProducts to the non-exist invoice.
     @Test
     public void reduceInvoiceProductsInvoiceNotExist() {
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-
-        Category category = new Category("snack");
-
-        em.persist(category);
-
         ArrayList<Pair<Long, Integer>> products = new ArrayList<>();
 
         // (name, count) => (snack1, 1), (snack2, 2), ... , (snack10, 10)
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100*i,
-                    180 + 30*i,
-                    12 + 6*i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
             Pair<Long, Integer> pair = Pair.of(product.getId(), i);
             products.add(pair);
         }
-
 
         // It throws IllegalArgumentException because invoice whose id is 999 does not exist.
         assertThrows(IllegalArgumentException.class, () -> invoiceService.reduceInvoiceProducts(999L, products));

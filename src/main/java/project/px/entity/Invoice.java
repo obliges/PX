@@ -19,18 +19,16 @@ public class Invoice {
     @Column(name = "invoice_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mart_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mart_id")
     private Mart mart;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
     private List<InvoiceProduct> invoiceProducts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private InvoiceStatus invoiceStatus;
 
-    @Column(nullable = false)
     private LocalDate arriveDate;
 
     // private Setter

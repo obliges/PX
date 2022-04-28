@@ -28,26 +28,7 @@ class ProductServiceTest {
     // Test 1 : Add product to DB
     @Test
     public void add() {
-
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-        Category category = new Category("snack");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-        em.persist(category);
-
-        Product product = new Product("snack",
-                800,
-                180,
-                12,
-                6,
-                productCompany,
-                transportCompany,
-                category,
-                ContractStatus.CONTRACTED,
-                DemandStatus.HIGH,
-                ProductLevel.A);
+        Product product = new Product("snack");
         Long productId = productService.add(product);
 
         em.flush();
@@ -64,26 +45,8 @@ class ProductServiceTest {
     // Test 2 : Find all product from DB
     @Test
     public void findProducts() {
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-        Category category = new Category("snack");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-        em.persist(category);
-
         for (int i = 1; i <= 10; i++) {
-            Product product = new Product("snack" + i,
-                    800 + 100 * i,
-                    180 + 30 * i,
-                    12 + 6 * i,
-                    null,
-                    productCompany,
-                    transportCompany,
-                    category,
-                    ContractStatus.CONTRACTED,
-                    DemandStatus.HIGH,
-                    ProductLevel.A);
+            Product product = new Product("snack" + i);
             em.persist(product);
         }
 
@@ -104,25 +67,7 @@ class ProductServiceTest {
     // Test 3 : Find one that exists in DB
     @Test
     public void findOneExist() {
-        TransportCompany transportCompany = new TransportCompany("tc1");
-        ProductCompany productCompany = new ProductCompany("pc1");
-        Category category = new Category("snack");
-
-        em.persist(transportCompany);
-        em.persist(productCompany);
-        em.persist(category);
-
-        Product product = new Product("snack",
-                800,
-                180,
-                12,
-                6,
-                productCompany,
-                transportCompany,
-                category,
-                ContractStatus.CONTRACTED,
-                DemandStatus.HIGH,
-                ProductLevel.A);
+        Product product = new Product("snack");
         Long productId = productService.add(product);
 
         em.flush();
@@ -130,8 +75,6 @@ class ProductServiceTest {
 
         Product foundProduct = productService.findOne(productId);
 
-        // foundProduct should not be null
-        assertThat(foundProduct).isNotNull();
         // The name of the foundProduct should be snack
         assertThat(foundProduct.getName()).isEqualTo("snack");
     }

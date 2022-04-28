@@ -17,15 +17,14 @@ public class StockProduct {
     @Column(name = "stock_product_id")
     private Long id;
 
-    @Column(nullable = false)
     private Integer count;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mart_id", nullable = false)
+    @JoinColumn(name = "mart_id")
     private Mart mart;
 
     public StockProduct(Integer count, Product product, Mart mart) {

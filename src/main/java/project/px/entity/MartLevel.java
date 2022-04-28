@@ -7,5 +7,15 @@ package project.px.entity;
  */
 
 public enum MartLevel {
-    A, B, C
+    A("A"), B("B"), C("C");
+
+    private final String description;
+
+    MartLevel(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

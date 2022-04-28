@@ -6,5 +6,15 @@ package project.px.entity;
  */
 
 public enum ContractStatus {
-    CONTRACTED, CANCELLED
+    CONTRACTED("Contracted"), CANCELLED("Cancelled");
+
+    private final String description;
+
+    ContractStatus(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

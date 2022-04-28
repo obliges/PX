@@ -10,50 +10,47 @@ import javax.persistence.*;
 @Entity
 @Table(name = "product")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue
     @Column(name = "product_id")
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private Integer price;
 
-    @Column(nullable = false)
     private Integer expirationDayPeriod;
 
-    @Column(nullable = false)
     private Integer bigBox;
 
     private Integer smallBox;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_company_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_company_id")
     private ProductCompany productCompany;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_transport_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_transport_id")
     private TransportCompany transportCompany;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ContractStatus contractStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private DemandStatus demandStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ProductLevel productLevel;
+
+    public Product(String name) {
+        this.name = name;
+    }
 
     public Product(String name,
                    Integer price,
