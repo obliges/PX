@@ -17,9 +17,9 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public List<Product> findAllFetch() {
         return queryFactory.selectFrom(product)
-                .join(product.productCompany).fetchJoin()
-                .join(product.transportCompany).fetchJoin()
-                .join(product.category).fetchJoin()
+                .leftJoin(product.productCompany).fetchJoin()
+                .leftJoin(product.transportCompany).fetchJoin()
+                .leftJoin(product.category).fetchJoin()
                 .fetch();
     }
 }

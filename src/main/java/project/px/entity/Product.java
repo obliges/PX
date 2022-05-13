@@ -1,8 +1,8 @@
 package project.px.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import project.px.dto.ProductAddForm;
+import project.px.dto.ProductDto;
 
 
 import javax.persistence.*;
@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "product")
 @Getter
+@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class Product {
     @Id
@@ -74,5 +75,56 @@ public class Product {
         this.contractStatus = contractStatus;
         this.demandStatus = demandStatus;
         this.productLevel = productLevel;
+    }
+
+    public static Product dtoToProduct(ProductDto productDto) {
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setExpirationDayPeriod(productDto.getExpirationDayPeriod());
+        product.setBigBox(productDto.getBigBox());
+        product.setSmallBox(productDto.getSmallBox());
+        product.setProductCompany(productDto.getProductCompany());
+        product.setTransportCompany(productDto.getTransportCompany());
+        product.setCategory(productDto.getCategory());
+        product.setContractStatus(productDto.getContractStatus());
+        product.setDemandStatus(productDto.getDemandStatus());
+        product.setProductLevel(productDto.getProductLevel());
+        return product;
+    }
+
+    public static Product dtoToProduct(ProductAddForm productDto) {
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setExpirationDayPeriod(productDto.getExpirationDayPeriod());
+        product.setBigBox(productDto.getBigBox());
+        product.setSmallBox(productDto.getSmallBox());
+        product.setProductCompany(productDto.getProductCompany());
+        product.setTransportCompany(productDto.getTransportCompany());
+        product.setCategory(productDto.getCategory());
+        product.setContractStatus(productDto.getContractStatus());
+        product.setDemandStatus(productDto.getDemandStatus());
+        product.setProductLevel(productDto.getProductLevel());
+        return product;
+    }
+
+    public static ProductDto productToDto(Product product) {
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setPrice(product.getPrice());
+        productDto.setExpirationDayPeriod(product.getExpirationDayPeriod());
+        productDto.setBigBox(product.getBigBox());
+        productDto.setSmallBox(product.getSmallBox());
+        productDto.setProductCompany(product.getProductCompany());
+        productDto.setTransportCompany(product.getTransportCompany());
+        productDto.setCategory(product.getCategory());
+        productDto.setContractStatus(product.getContractStatus());
+        productDto.setDemandStatus(product.getDemandStatus());
+        productDto.setProductLevel(product.getProductLevel());
+        return productDto;
     }
 }

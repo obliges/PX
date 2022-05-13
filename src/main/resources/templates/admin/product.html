@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/styles.css}"
+          href="../css/styles.css" rel="stylesheet"/>
+    <style>
+        .container {
+            max-width = 600px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" th:object="${product}">
+    <div>
+        <div>productId</div>
+        <input type="text" th:value="*{id}" class="form-control" readonly>
+    </div>
+
+    <div>
+        <div>productName</div>
+        <input type="text" th:value="*{name}" class="form-control" readonly>
+    </div>
+    <div>
+        <div>price</div>
+        <input type="text" th:field="*{price}" class="form-control" readonly>
+    </div>
+    <div>
+        <div>expirationDayPeriod</div>
+        <input type="text" th:field="*{expirationDayPeriod}" class="form-control" readonly>
+    </div>
+    <div>
+        <div>bigBox</div>
+        <input type="text" th:field="*{bigBox}" class="form-control" readonly>
+    </div>
+    <div>
+        <div>smallBox</div>
+        <input type="text" th:field="*{smallBox}" class="form-control" readonly>
+        <div>smallBox is nullable</div>
+    </div>
+    <div>
+        <div>productCompany</div>
+        <select th:field="*{productCompany}" class="form-select" disabled>
+            <option value="">== Select Product Company ==</option>
+            <option th:each="productCompany : ${productCompanies}" th:value="${productCompany.id}"
+                    th:text="${productCompany.name}">productCompany</option>
+        </select>
+    </div>
+    <div>
+        <div>transportCompany</div>
+        <select th:field="*{transportCompany}" class="form-select" disabled>
+            <option value="">== Select Transport Company ==</option>
+            <option th:each="transportCompany : ${transportCompanies}" th:value="${transportCompany.id}"
+                    th:text="${transportCompany.name}">transportCompany</option>
+        </select>
+    </div>
+    <div>
+        <div>category</div>
+        <select th:field="*{category}" class="form-select" disabled>
+            <option value="">== Select Category ==</option>
+            <option th:each="category : ${categories}" th:value="${category.id}"
+                    th:text="${category.name}">category</option>
+        </select>
+    </div>
+
+
+    <div>
+        <div>contractStatus</div>
+        <div th:each="status : ${contractStatusList}" class="form-check">
+            <input type="radio" th:field="*{contractStatus}" th:value="${status.name()}"
+                   class="form-check-input" disabled>
+            <label th:for="${#ids.prev('contractStatus')}" th:text="${status.description}"
+                   class="form-check-label">
+                Contracted
+            </label>
+        </div>
+    </div>
+    <div>
+        <div>demandStatus</div>
+        <div th:each="status : ${demandStatusList}" class="form-check">
+            <input type="radio" th:field="*{demandStatus}" th:value="${status.name()}"
+                   class="form-check-input" disabled>
+            <label th:for="${#ids.prev('demandStatus')}" th:text="${status.description}"
+                   class="form-check-label">
+                High
+            </label>
+        </div>
+    </div>
+    <div>
+        <div>productLevel</div>
+        <div th:each="level : ${productLevels}" class="form-check">
+            <input type="radio" th:field="*{productLevel}" th:value="${level.name()}"
+                   class="form-check-input" disabled>
+            <label th:for="${#ids.prev('productLevel')}" th:text="${level.description}"
+                   class="form-check-label">
+                A
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" onclick="location.href='productEditForm.html'"
+                    th:onclick="|location.href='@{/admin/product/edit/{productId}(productId=${product.id})}}'|"
+                    type="button">Edit</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" onclick="location.href='products.html'"
+                    th:onclick="|location.href='@{/admin/product}'|"
+                    type="button">List</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

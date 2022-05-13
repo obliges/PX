@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.px.dto.ProductAddForm;
+import project.px.dto.ProductDto;
 import project.px.entity.*;
 import project.px.repository.ProductRepository;
 import project.px.service.ProductService;
@@ -15,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -73,13 +77,48 @@ public class AdminProductController {
 
     @GetMapping
     public String productList(Model model) {
-        model.addAttribute("products", new Product());
+        List<ProductDto> products = productRepository.findAllFetch()
+                .stream().map(Product::productToDto)
+                .collect(Collectors.toList());
+        model.addAttribute("products", products);
         return "admin/products";
+    }
+
+    @GetMapping("/{productId}")
+    public String productInfo(@PathVariable("productId") Long productId, Model model) {
+        ProductDto product = Product.productToDto(productService.findOne(productId));
+        model.addAttribute("product", product);
+        return "admin/product";
     }
 
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("product", new Product());
         return "admin/productAddForm";
+    }
+
+    @PostMapping("/add")
+    public String add(@ModelAttribute("product") @Validated ProductAddForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if (form.getSmallBox() != null) {
+            if (form.getBigBox() != null && form.getBigBox() <= form.getSmallBox()) {
+                bindingResult.reject("bigSmallBox", "SmallBox should be smaller than BigBox.");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "admin/productAddForm";
+        }
+
+        Long productId = productService.add(Product.dtoToProduct(form));
+        redirectAttributes.addAttribute("productId", productId);
+        return "redirect:/admin/product/{productId}";
+    }
+
+    @GetMapping("/edit/{productId}")
+    public String editForm(@PathVariable("productId") Long productId, Model model) {
+        ProductDto product = Product.productToDto(productService.findOne(productId));
+        model.addAttribute("product", product);
+        return "admin/productEditForm";
     }
 }

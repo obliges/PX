@@ -3,6 +3,7 @@ package project.px.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter(AccessLevel.PRIVATE)
 @Table(name = "invoice")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Invoice {

@@ -9,55 +9,72 @@
         .container {
             max-width: 600px;
         }
+        .error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <form action="product.html" th:action th:object="${product}" method="post">
+
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}">error</p>
+        </div>
+
         <div>
-            <div>productName</div>
-            <input type="text" th:field="*{name}" class="form-control">
+            <div>name</div>
+            <input type="text" th:field="*{name}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{name}"></div>
         </div>
         <div>
             <div>price</div>
-            <input type="text" th:field="*{price}" class="form-control">
+            <input type="text" th:field="*{price}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{price}"></div>
         </div>
         <div>
             <div>expirationDayPeriod</div>
-            <input type="text" th:field="*{expirationDayPeriod}" class="form-control">
+            <input type="text" th:field="*{expirationDayPeriod}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{expirationDayPeriod}"></div>
         </div>
         <div>
             <div>bigBox</div>
-            <input type="text" th:field="*{bigBox}" class="form-control">
+            <input type="text" th:field="*{bigBox}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{bigBox}"></div>
         </div>
         <div>
             <div>smallBox</div>
-            <input type="text" th:field="*{smallBox}" class="form-control">
+            <input type="text" th:field="*{smallBox}" th:errorclass="error" class="form-control">
             <div>smallBox is nullable</div>
+            <div class="error" th:errors="*{smallBox}"></div>
         </div>
         <div>
             <div>productCompany</div>
-            <select th:field="*{productCompany}" class="form-select">
+            <select th:field="*{productCompany}" th:errorclass="error" class="form-select">
                 <option value="">== Select Product Company ==</option>
-                <option th:each="productCompany : ${productCompanies}" th:value="${productCompany}"
+                <option th:each="productCompany : ${productCompanies}" th:value="${productCompany.id}"
                         th:text="${productCompany.name}">productCompany</option>
             </select>
+            <div class="error" th:errors="*{productCompany}"></div>
         </div>
         <div>
             <div>transportCompany</div>
-            <select th:field="*{transportCompany}" class="form-select">
+            <select th:field="*{transportCompany}" th:errorclass="error" class="form-select">
                 <option value="">== Select Transport Company ==</option>
-                <option th:each="transportCompany : ${transportCompanies}" th:value="${transportCompany}"
+                <option th:each="transportCompany : ${transportCompanies}" th:value="${transportCompany.id}"
                         th:text="${transportCompany.name}">transportCompany</option>
             </select>
+            <div class="error" th:errors="*{transportCompany}"></div>
         </div>
         <div>
             <div>category</div>
             <select th:field="*{category}" class="form-select">
                 <option value="">== Select Category ==</option>
-                <option th:each="category : ${categories}" th:value="${category}"
-                        th:text="${transportCompany.name}">category</option>
+                <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}">category</option>
             </select>
+            <div class="error" th:errors="*{category}"></div>
         </div>
 
 
@@ -71,6 +88,7 @@
                     Contracted
                 </label>
             </div>
+            <div class="error" th:errors="*{contractStatus}"></div>
         </div>
         <div>
             <div>demandStatus</div>
@@ -82,6 +100,7 @@
                     High
                 </label>
             </div>
+            <div class="error" th:errors="*{demandStatus}"></div>
         </div>
         <div>
             <div>productLevel</div>
@@ -93,6 +112,7 @@
                     A
                 </label>
             </div>
+            <div class="error" th:errors="*{productLevel}"></div>
         </div>
 
         <div class="row">
