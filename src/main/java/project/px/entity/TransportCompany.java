@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "transport_company")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class TransportCompany {
     @Id
     @GeneratedValue

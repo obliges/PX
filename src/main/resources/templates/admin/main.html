@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/styles.css}"
+          href="../css/styles.css" rel="stylesheet"/>
+</head>
+<body>
+<div>
+    <button class="btn btn-primary" onclick="location.href='product.html'"
+            th:onclick="|location.href='/admin/product'|"
+            type="button">Product</button>
+</div>
+<div>
+    <button class="btn btn-primary" onclick="location.href='productCompany.html'"
+            th:onclick="|location.href='/admin/productCompany'|"
+            type="button">Product Company</button>
+</div>
+<div>
+    <button class="btn btn-primary" onclick="location.href='transportCompany.html'"
+            th:onclick="|location.href='/admin/transportCompany'|"
+            type="button">Transport Company</button>
+</div>
+<div>
+    <button class="btn btn-primary" onclick="location.href='category.html'"
+            th:onclick="|location.href='/admin/category'|"
+            type="button">Category</button>
+</div>
+
+
+</body>
+</html>

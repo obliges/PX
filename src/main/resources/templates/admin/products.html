@@ -49,7 +49,9 @@
             <tbody>
                 <tr th:each="product : ${products}">
                     <td th:text="${product.id}">id</td>
-                    <td th:text="${product.name}">name</td>
+                    <td><a href="product.html"
+                           th:href="@{|/admin/product/${product.id}|}"
+                           th:text="${product.name}">name</a></td>
                     <td th:text="${product.price}">price</td>
                     <td th:text="${product.expirationDayPeriod}">expirationDayPeriod</td>
                     <td th:text="${product.bigBox}">bigBox</td>

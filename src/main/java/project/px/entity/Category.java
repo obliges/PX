@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "category")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Category {
     @Id
     @GeneratedValue

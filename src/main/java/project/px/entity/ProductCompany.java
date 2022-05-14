@@ -1,9 +1,8 @@
 package project.px.entity;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import project.px.dto.ProductCompanyDto;
 
 import javax.persistence.*;
 
@@ -12,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "product_company")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ProductCompany {
     @Id
     @GeneratedValue
@@ -23,5 +22,10 @@ public class ProductCompany {
 
     public ProductCompany(String name) {
         this.name = name;
+    }
+
+    public void DtoToObject(ProductCompanyDto productCompanyDto) {
+        this.id = productCompanyDto.getId();
+        this.name = productCompanyDto.getName();;
     }
 }
