@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/styles.css}"
+          href="../css/styles.css" rel="stylesheet"/>
+    <style>
+        .container {
+            max-width: 600px;
+        }
+        .error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form action="product.html" th:action th:object="${product}" method="post">
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}">error</p>
+        </div>
+
+        <div>
+            <div>id</div>
+            <input type="text" th:field="*{id}" class="form-control" readonly>
+        </div>
+        <div>
+            <div>name</div>
+            <input type="text" th:field="*{name}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{name}"></div>
+        </div>
+        <div>
+            <div>price</div>
+            <input type="text" th:field="*{price}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{price}"></div>
+        </div>
+        <div>
+            <div>expirationDayPeriod</div>
+            <input type="text" th:field="*{expirationDayPeriod}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{expirationDayPeriod}"></div>
+        </div>
+        <div>
+            <div>bigBox</div>
+            <input type="text" th:field="*{bigBox}" th:errorclass="error" class="form-control">
+            <div class="error" th:errors="*{bigBox}"></div>
+        </div>
+        <div>
+            <div>smallBox</div>
+            <input type="text" th:field="*{smallBox}" th:errorclass="error" class="form-control">
+            <div>smallBox is nullable</div>
+            <div class="error" th:errors="*{smallBox}"></div>
+        </div>
+        <div>
+            <div>productCompany</div>
+            <select th:field="*{productCompany}" th:errorclass="error" class="form-select">
+                <option value="">== Select Product Company ==</option>
+                <option th:each="productCompany : ${productCompanies}" th:value="${productCompany.id}"
+                        th:text="${productCompany.name}">productCompany</option>
+            </select>
+            <div class="error" th:errors="*{productCompany}"></div>
+        </div>
+        <div>
+            <div>transportCompany</div>
+            <select th:field="*{transportCompany}" th:errorclass="error" class="form-select">
+                <option value="">== Select Transport Company ==</option>
+                <option th:each="transportCompany : ${transportCompanies}" th:value="${transportCompany.id}"
+                        th:text="${transportCompany.name}">transportCompany</option>
+            </select>
+            <div class="error" th:errors="*{transportCompany}"></div>
+        </div>
+        <div>
+            <div>category</div>
+            <select th:field="*{category}" class="form-select">
+                <option value="">== Select Category ==</option>
+                <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}">category</option>
+            </select>
+            <div class="error" th:errors="*{category}"></div>
+        </div>
+
+
+        <div>
+            <div>contractStatus</div>
+            <div th:each="status : ${contractStatusList}" class="form-check">
+                <input type="radio" th:field="*{contractStatus}" th:value="${status.name()}"
+                       class="form-check-input">
+                <label th:for="${#ids.prev('contractStatus')}" th:text="${status.description}"
+                       class="form-check-label">
+                    Contracted
+                </label>
+            </div>
+            <div class="error" th:errors="*{contractStatus}"></div>
+        </div>
+        <div>
+            <div>demandStatus</div>
+            <div th:each="status : ${demandStatusList}" class="form-check">
+                <input type="radio" th:field="*{demandStatus}" th:value="${status.name()}"
+                       class="form-check-input">
+                <label th:for="${#ids.prev('demandStatus')}" th:text="${status.description}"
+                       class="form-check-label">
+                    High
+                </label>
+            </div>
+            <div class="error" th:errors="*{demandStatus}"></div>
+        </div>
+        <div>
+            <div>productLevel</div>
+            <div th:each="level : ${productLevels}" class="form-check">
+                <input type="radio" th:field="*{productLevel}" th:value="${level.name()}"
+                       class="form-check-input">
+                <label th:for="${#ids.prev('productLevel')}" th:text="${level.description}"
+                       class="form-check-label">
+                    A
+                </label>
+            </div>
+            <div class="error" th:errors="*{productLevel}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary" type="submit">Edit Product</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" onclick="location.href='products.html'"
+                        th:onclick="|location.href='@{/admin/product}'|"
+                        type="button"> Go Back </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>

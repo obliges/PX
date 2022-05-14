@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.px.dto.ProductAddForm;
 import project.px.dto.ProductDto;
+import project.px.dto.ProductEditForm;
 import project.px.entity.*;
 import project.px.repository.ProductRepository;
 import project.px.service.ProductService;
@@ -99,8 +100,7 @@ public class AdminProductController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("product") @Validated ProductAddForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
-        if (form.getSmallBox() != null) {
+        if (form.getSmallBox() != null && form.getBigBox() != null) {
             if (form.getBigBox() != null && form.getBigBox() <= form.getSmallBox()) {
                 bindingResult.reject("bigSmallBox", "SmallBox should be smaller than BigBox.");
             }
@@ -120,5 +120,23 @@ public class AdminProductController {
         ProductDto product = Product.productToDto(productService.findOne(productId));
         model.addAttribute("product", product);
         return "admin/productEditForm";
+    }
+
+    @PostMapping("/edit/{productId}")
+    public String edit(@ModelAttribute("product") @Validated ProductEditForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (form.getSmallBox() != null && form.getBigBox() != null) {
+            if (form.getBigBox() <= form.getSmallBox()) {
+                bindingResult.reject("bigSmallBox", "SmallBox should be smaller than BigBox.");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "admin/productEditForm";
+        }
+
+        Product product = productService.findOne(form.getId());
+        productService.update(product, form);
+        redirectAttributes.addAttribute("productId", form.getId());
+        return "redirect:/admin/product/{productId}";
     }
 }

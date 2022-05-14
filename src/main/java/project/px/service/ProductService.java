@@ -3,6 +3,7 @@ package project.px.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.px.dto.ProductEditForm;
 import project.px.entity.Product;
 import project.px.repository.ProductRepository;
 
@@ -30,5 +31,9 @@ public class ProductService {
         return productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("Product whose id is " + productId + " does not exist.")
         );
+    }
+
+    public void update(Product product, ProductEditForm form) {
+        product.update(form);
     }
 }

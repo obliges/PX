@@ -3,6 +3,7 @@ package project.px.entity;
 import lombok.*;
 import project.px.dto.ProductAddForm;
 import project.px.dto.ProductDto;
+import project.px.dto.ProductEditForm;
 
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "product")
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor
 public class Product {
     @Id
@@ -111,6 +112,20 @@ public class Product {
         return product;
     }
 
+    public void update(ProductEditForm form) {
+        this.name = form.getName();
+        this.price = form.getPrice();
+        this.expirationDayPeriod = form.getExpirationDayPeriod();
+        this.bigBox = form.getBigBox();
+        this.smallBox = form.getSmallBox();
+        this.productCompany = form.getProductCompany();
+        this.transportCompany = form.getTransportCompany();
+        this.category = form.getCategory();
+        this.contractStatus = form.getContractStatus();
+        this.demandStatus = form.getDemandStatus();
+        this.productLevel = form.getProductLevel();
+    }
+
     public static ProductDto productToDto(Product product) {
         ProductDto productDto = new ProductDto();
         productDto.setId(product.getId());
@@ -127,4 +142,6 @@ public class Product {
         productDto.setProductLevel(product.getProductLevel());
         return productDto;
     }
+
+
 }

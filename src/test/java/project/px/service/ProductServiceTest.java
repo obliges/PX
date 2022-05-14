@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import project.px.dto.ProductEditForm;
 import project.px.entity.*;
 
 import javax.persistence.EntityManager;
@@ -84,5 +85,23 @@ class ProductServiceTest {
     public void findOneNotExist() {
         assertThrows(IllegalArgumentException.class, () -> productService.findOne(16579L));
     }
+
+    // Test 5 : Update product using editForm
+    @Test
+    public void update() {
+        Product product = new Product("snack");
+        Long productId = productService.add(product);
+
+        ProductEditForm form = new ProductEditForm();
+        form.setName("juice");
+        product.update(form);
+
+        em.flush();
+        em.clear();
+
+        Product foundProduct = productService.findOne(productId);
+        assertThat(foundProduct.getName()).isEqualTo("juice");
+    }
+
 
 }
