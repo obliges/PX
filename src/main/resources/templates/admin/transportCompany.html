@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/styles.css}"
+          href="../css/styles.css" rel="stylesheet"/>
+    <style>
+        .container {
+            max-width = 600px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" th:object="${transportCompany}">
+    <div>
+        <div>transportCompanyId</div>
+        <input type="text" th:value="*{id}" class="form-control" readonly>
+    </div>
+    <div>
+        <div>transportCompanyName</div>
+        <input type="text" th:value="*{name}" class="form-control" readonly>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" onclick="location.href='transportCompanyEditForm.html'"
+                    th:onclick="|location.href='@{/admin/transportCompany/edit/{transportCompanyId}(transportCompanyId=${transportCompany.id})}'|"
+                    type="button">Edit</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" onclick="location.href='transportCompanies.html'"
+                    th:onclick="|location.href='@{/admin/transportCompany}'|"
+                    type="button">List</button>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

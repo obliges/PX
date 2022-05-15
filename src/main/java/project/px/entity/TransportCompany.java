@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import project.px.dto.ProductCompanyDto;
+import project.px.dto.TransportCompanyDto;
 
 import javax.persistence.*;
 
@@ -23,5 +25,10 @@ public class TransportCompany {
 
     public TransportCompany(String name) {
         this.name = name;
+    }
+
+    public void DtoToObject(TransportCompanyDto transportCompanyDto) {
+        this.id = transportCompanyDto.getId();
+        this.name = transportCompanyDto.getName();;
     }
 }

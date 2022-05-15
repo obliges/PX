@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/css/styles.css}"
+          href="../css/styles.css" rel="stylesheet"/>
+    <style>
+        .container {
+            max-width = 600px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary"
+                    onclick="location.href='categoryAddForm.html'"
+                    th:onclick="|location.href='@{/admin/category/add}'|"
+                    type="button">Add</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary"
+                    onclick="location.href='admin/main'"
+                    th:onclick="|location.href='@{/admin/main}'|"
+                    type="button">Go to Main</button>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>id</td>
+                <td>name</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.id}">id</td>
+                <td><a href="categor.html"
+                       th:href="@{|/admin/category/${category.id}|}"
+                       th:text="${category.name}">name</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

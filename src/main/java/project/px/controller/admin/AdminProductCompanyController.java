@@ -13,6 +13,7 @@ import project.px.entity.ProductCompany;
 import project.px.repository.ProductCompanyRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -32,7 +33,7 @@ public class AdminProductCompanyController {
 
     @GetMapping("/{productCompanyId}")
     public String companyInfo(@PathVariable("productCompanyId") Long productCompanyId, Model model) {
-        ProductCompany productCompany = productCompanyRepository.findById(productCompanyId).get();
+        ProductCompany productCompany = productCompanyRepository.findById(productCompanyId).orElseThrow(() -> new NoSuchElementException("Product company does not exist"));
         model.addAttribute("productCompany", productCompany);
         return "admin/productCompany";
     }
@@ -61,7 +62,7 @@ public class AdminProductCompanyController {
 
     @GetMapping("/edit/{productCompanyId}")
     public String editForm(@PathVariable("productCompanyId") Long productCompanyId, Model model) {
-        ProductCompany productCompany = productCompanyRepository.findById(productCompanyId).get();
+        ProductCompany productCompany = productCompanyRepository.findById(productCompanyId).orElseThrow(() -> new NoSuchElementException("Product company does not exist"));
         ProductCompanyDto productCompanyDto = new ProductCompanyDto();
         productCompanyDto.setId(productCompany.getId());
         productCompanyDto.setName(productCompany.getName());
@@ -79,7 +80,7 @@ public class AdminProductCompanyController {
             return "admin/productCompanyEditForm";
         }
 
-        ProductCompany productCompany = productCompanyRepository.findById(productCompanyDto.getId()).get();
+        ProductCompany productCompany = productCompanyRepository.findById(productCompanyDto.getId()).orElseThrow(() -> new NoSuchElementException("Product company does not exist"));;
         productCompany.DtoToObject(productCompanyDto);
         productCompanyRepository.save(productCompany);
         redirectAttributes.addAttribute("productCompanyId", productCompanyDto.getId());
